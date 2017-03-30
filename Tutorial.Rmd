@@ -2,26 +2,24 @@
 title: 'Artificial Intelligence: a Neural Network Tutorial'
 author: "Luca Vignali"
 output:
-  html_document: default
   html_notebook: default
+  html_document: default
 ---
 
 # Overview
 In this document we describe with simple example and model how neural networks work, in order to understand the technology that is enabling Artificial Intelligence implementation.
 
 # What we will show
-We will build a Neural Network capable of classifying the Iris flower according to the following species:
+We will build a Neural Network capable of classifying the Iris flower according to the three species Setosa, Versicolor and Virginica. 
+We selected Iris species as it is commonly used to test classification algorithm.
 
-!["Setosa"](./Iris-setosa-23.jpg) 
+As we want to focus on Sinmple Neural Network to keep it easy and understandable, we will base our classification on length and width of Petal and Sepal, according to the Iris Data set - see attribute information box -. It is in fact known that one can classify the Iris type based on those "features".
+In contrast we will not develop an image recognition Convolutional Neural Network as we want to make the Neural Net simple and understandable.
 
-
-!["Versicolor"](./IRIS_VERSICOLOR.JPG)
-
-!["Virginica"](./1200px-Iris_virginica.jpg)
+!["FIGURE 1 - IRIS"](./IRIS.png) 
 
  
-As we want to focus on Sinmple Neural Network to keep it easy and understandable, we will base our classification on length and width of Petal and Sepal, according to the Iris Data set. It is in fact known that one can classify the Iris type based on those "features".
-In contrast we will not develop an image recognition Convolutional Neural Network as we want to make the Neural Net simple and understandable.
+
 
 So our input is the Iris Data set summarized here.
 
@@ -29,18 +27,46 @@ So our input is the Iris Data set summarized here.
 summary(iris)
 ```
 
-# Simple Neural Network
-A Neural Network consists of neural unit connected among them and connected with the world through input and output. So basically Neural Network has the Input layer, the outpur layer and hidden layers as showed in the following picture, where only one layer is showed:
+# How we will do it
+We will use a standard LEARN and TEST approach, like at school: you have exercises with solutions you go through to learn and verify you are learning, and then you have the test phase where you have the exercise and the teacher will verify your result. This approach is used with Neural Netowrk as well and it is called Supervised Learning. The learning phase is also called training phase.
 
-!["Neural Network Architecture with one hidden layer"](./NeuralNet.PNG)
+For the training phase we will use a portion of the Iris Data set and the remaining part of the data set will be used for the testing phase. Let's consider 66% of the data for training and 33% of the data for testing. As the entire data set consists of 150 rows, we will use 100 rows as exercises to train like in homework and 50 rows as exercises to test like in class tests.  
 
-Note that all neural units are connected to all neural units of the following layer. Such kind of Neural Network is a Feed Forward Neural Network, in contrast to convolutional and recursive Neural Network that have a different architecture. Here we will focus on Feed Forward Neural Network.
+So our "student" that is the Neural Network - remember that it doesn't know anything about Iris Species - will be trained with 100 exercises, During this phase it will learn, just by "looking" at the example, you don't need to explain anything. After this phase we will test it with the reamaining 50 exercises, but this time we will provide to the Neural Network only the Petal, Sepal, length, width and will ask to classify the Iris. We will then check the answers against the solution that we have.
 
-Each neural unit receives several numerical input, weight each input and sum the input, before sending to the output the numerical value is processed by a non linear function that is called activation function as showed in the following picture
+```{r}
+# set.seed(10)
+# iris[sample(1:150,10),]
+```
 
-!["A single Neural Unit"](./Perceptron.PNG)
 
-Note the presence of Bias that is a constant input independent from the actual variable input.
+During this phase it will learn, just by "looking" at the example, you don't need to explain anything. After this phase we will test it with the reamaining 50 exercises, but this time we will provide to the Neural Network only the Petal, Sepal, length, width and will ask to classify the Iris. We will then check the answers against the solution that we have.
+So the test will be performed on 50 exercises. See the following picture:
+
+!["FIGURE 2 - TRAINING AND TESTING PHASES"](./Training-Testing.png) 
+
+```{r}
+# set.seed(150)
+# Species = rep("?",10)
+# cbind(iris[sample(1:150,10),1:4],Species)
+```
+
+
+So after the training we will ask the Neural Network to replace the question mark with the proper answer: Setosa, Versicolor, Virginica.
+
+Doesn't sound a bit magic? 
+
+That's the magic of learning by Neural Network. Think about the magic of a child learning a language just by listening, and sometimes getting the parents correcting him.
+Neural Network works in a similar way, as they try to mimic how the brain works.
+
+But now let's see what's a Neural Network.
+
+
+# What a Neural Network is
+A Neural Network consists of neural units connected among them and connected with the world through input and output. So basically Neural Network has one Input layer, one outpur layer and several hidden layers. In the case all neural units are connected to all neural units of the following layer. Such kind of Neural Network is a Feed Forward Neural Network, in contrast to convolutional and recursive Neural Network that have a different architecture. Here we will focus on Feed Forward Neural Network.Each neural unit receives several numerical input, weight each input and sum the input, before sending to the output the numerical value is processed by a non linear function that is called activation function as showed in the following picture:
+
+!["Neural Network Architecture"](./NeuralNetwork.PNG)
+
 
 So the Neural Network is basically defined by:
 
@@ -50,9 +76,6 @@ So the Neural Network is basically defined by:
 * The activation function at each neuron.
 * The bias input to each layer - excluding input layer
 
-Examples of activation function - always non linear as the linearity is embedded in the weights - are !["Sigmoid"](./Sigmoid.PNG)
-
-and !["Rectified linear units"](./Rectifier.PNG)
 
 # Now let's classify the Iris!
 
