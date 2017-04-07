@@ -1,72 +1,98 @@
 ---
-title: 'Artificial Intelligence: a Neural Network Tutorial'
+title: 'Artificial Intelligence: How is Neural Network working, better than you?'
 author: "Luca Vignali"
 output:
   html_notebook: default
   html_document: default
 ---
 
-# Overview
-In this document we describe with simple example and model how neural networks work, in order to understand the technology that is enabling Artificial Intelligence implementation.
+# 1. Overview
+In this document we challenge you with the following: **Can you make a classification task better than a simple Neural Network?** While challenging you against Neural Network, you will learn how **Neural Network works** and you will learn a bit more what Artifical Intelligence is, at least in the simplest implementation. In this document when we speak about Neural Network we refer to Artificial Neural Network. 
 
-# What we will show
-We will build a Neural Network capable of classifying the Iris flower according to the three species Setosa, Versicolor and Virginica. 
-We selected Iris species as it is commonly used to test classification algorithm.
+**In the following you will find**:
 
-As we want to focus on Sinmple Neural Network to keep it easy and understandable, we will base our classification on length and width of Petal and Sepal, according to the Iris Data set - see attribute information box -. It is in fact known that one can classify the Iris type based on those "features".
-In contrast we will not develop an image recognition Convolutional Neural Network as we want to make the Neural Net simple and understandable.
+* Chapter 2: we will describe the challenge that is classify the Iris Flower species based on key flower characteristics. Even if you don't want to create your model, read this part to understand the Neural Network learning process. 
+* Chapter 3: we will explain the Neural Network learning metodology, based on training phase and testing phase.
+* Chapter 4: we will briefly explain what a Neural Network is.
+* Chapter 5:  we will build two Neural Networks and test how well they can classify the Iris Flower, so you can see if you can do it better than Neural Network or not. For you to know, **the Neural Network here will reach 96% correct answers!** So you have to do better than this! But don't be afraid if you can't, you will understand why at the end.
 
-!["FIGURE 1 - IRIS"](./IRIS.png) 
+# 2. The Challenge: Classify Iris Flower
+Do you know Iris Flower? The Iris flower species recognition is a typical task to test Algorithms classification, so we will use this test to verify if you can classifiy Iris Flower better than a simple Neural Network.
 
- 
+The Iris flower can be classified according to the three species: Setosa, Versicolor and Virginica. 
+
+As we want to challenge you against a Simple Neural Network to keep it easy and understandable, we will not base our classification on images, but on length and width of Petal and Sepal. As you can see in the following picture, the three types of Iris have different shapes, and it is important to know that they can be classified based on lenght - width of Sepal and Petal, as you can see in the following images:
 
 
-So our input is the Iris Data set summarized here.
 
-```{r}
-summary(iris)
+<p style="text-align:center;"><img src="./IRIS.png" alt="Iris" style="width: 500px;"></p>
+
+##### Figure 1 - Iris Flower Species and Attributes to classify them
+
+If you look at the Attribute Information box, you can see Petal and Sepal and few example of training material. Looking at the first row in the Example 5.3,3.7,1.5,0.2,Iris-Setosa, means that one specific flower, one sample, was an Iris Setosa with Sepal Length = 5.3cm, Sepal Width = 3.7cm, Petal Length = 1.5cm and Petal Width = 0.2cm.  
+
+### You try to classify the Iris with this Data!
+
+Now the challenge for you is to try to find "rules" to classify the Iris Flower based on the following 100 Samples. They are basically 100 examples of real Iris flowers, for each Flower you have the Sepal Length, Sepal Width the Petal Length and the Petal Width. 
+
+```{r, echo=FALSE, fig.height= 10}
+set.seed(88)
+i <- sample(1:150,100)
+iris_train <- iris[i,]
+iris_test <- iris[-i,]
+iris_train
 ```
+##### Table 1 - Data to learn about Iris Species classification
 
-# How we will do it
-We will use a standard LEARN and TEST approach, like at school: you have exercises with solutions you go through to learn and verify you are learning, and then you have the test phase where you have the exercise and the teacher will verify your result. This approach is used with Neural Netowrk as well and it is called Supervised Learning. The learning phase is also called training phase.
+The rules that you can find from the above real data are basically defining what you learnt about the Iris Flower. But to test your rules, in other words to test what you learnt, you are required to Classify the following 50 flowers, but in this case you have to provide the Species, and check them against the correct answer.
 
-For the training phase we will use a portion of the Iris Data set and the remaining part of the data set will be used for the testing phase. Let's consider 66% of the data for training and 33% of the data for testing. As the entire data set consists of 150 rows, we will use 100 rows as exercises to train like in homework and 50 rows as exercises to test like in class tests.  
-
-So our "student" that is the Neural Network - remember that it doesn't know anything about Iris Species - will be trained with 100 exercises, During this phase it will learn, just by "looking" at the example, you don't need to explain anything. After this phase we will test it with the reamaining 50 exercises, but this time we will provide to the Neural Network only the Petal, Sepal, length, width and will ask to classify the Iris. We will then check the answers against the solution that we have.
-
-```{r}
-# set.seed(10)
-# iris[sample(1:150,10),]
+So hereafter you can find the list of 50 flowers you have to classify after you learnt about Iris Flower:
+```{r, echo = FALSE}
+iris_test[,c(1:4)]
 ```
+##### Table 2 - Data to provide your classification answers based on what you learnt
+
+and here you can find the correct answers you must check against your answer. At the end you have for example 30 correct answers out of 50 cases, you have 60% correct answers. Note that they are ordered by Species for your convenience. 
 
 
-During this phase it will learn, just by "looking" at the example, you don't need to explain anything. After this phase we will test it with the reamaining 50 exercises, but this time we will provide to the Neural Network only the Petal, Sepal, length, width and will ask to classify the Iris. We will then check the answers against the solution that we have.
-So the test will be performed on 50 exercises. See the following picture:
 
-!["FIGURE 2 - TRAINING AND TESTING PHASES"](./Training-Testing.png) 
-
-```{r}
-# set.seed(150)
-# Species = rep("?",10)
-# cbind(iris[sample(1:150,10),1:4],Species)
+```{r, echo = FALSE}
+iris_test[,5]
 ```
+##### Table 3 - Correct Answers to check your results
+
+Before you test your model, if you have created one, remember that a 33% correct values can be obtain with random answers, as there are 3 possible equally distributed Species. So you must do better than 33%.
+
+# 3. Neural Network learns by itself
+
+Now regardless you have created your model or not, you understood the process we proposed to you:
+
+1. **Learn** about Iris Species by looking at 100 cases of iris Flowers
+2. **Classify** 50 new flowers based on what you learnt
+3. **Test** your correct answers comparing your output with the right answers
+
+This is exactly how we will do with the Neural Network, we will Train Neural Network with 100 flowers, we will ask the trained Neural Network to classify 50 new flowers, we will check answers correcteness.
+
+During the process we will learn how Neural Networks work. NOTE that we, as humans, are not going to teach anything to the Neural Network, in fact we might not be able to classify the Iris, even worse we might not be able to write a software program for this task, while the Neural Network is **LEARNING BY ITSELF**. This is the great difference between programming a Computer and let it learn with Neural Networks. Thanks to Artificial Intelligence, more precisely with Narrow Artificial Intelligence implemented with Neural Networks, the machine can do and understand things without being instructed by humans. This is actually true for other tecniques in Machine Learning, but this topic is out of scope here.
+
+Before proceding with the training and the test, let's see how a Neural Network looks like.
 
 
-So after the training we will ask the Neural Network to replace the question mark with the proper answer: Setosa, Versicolor, Virginica.
+# 4. Some Background: What a Neural Network is
+A Neural Network consists of neural units connected among them and connected with the world through input and output. So basically Neural Network has:
 
-Doesn't sound a bit magic? 
+* one Input layer
+* one outpur layer 
+* several hidden layers. 
 
-That's the magic of learning by Neural Network. Think about the magic of a child learning a language just by listening, and sometimes getting the parents correcting him.
-Neural Network works in a similar way, as they try to mimic how the brain works.
+In the case the connections goes in one direction only from input to output such kind of Neural Network is a **Feed Forward Neural Network**. This is in contrast to convolutional and recursive Neural Network that have a different and more complex architecture. 
+Here we will focus on Feed Forward Neural Network. 
 
-But now let's see what's a Neural Network.
+Each neural unit receives several numerical input, weights each input and sum the input, before sending to the output the numerical value is processed by a non linear function that is called **Activation Function** as showed in the following picture:
 
+![](./NeuralNetwork.PNG)
 
-# What a Neural Network is
-A Neural Network consists of neural units connected among them and connected with the world through input and output. So basically Neural Network has one Input layer, one outpur layer and several hidden layers. In the case all neural units are connected to all neural units of the following layer. Such kind of Neural Network is a Feed Forward Neural Network, in contrast to convolutional and recursive Neural Network that have a different architecture. Here we will focus on Feed Forward Neural Network.Each neural unit receives several numerical input, weight each input and sum the input, before sending to the output the numerical value is processed by a non linear function that is called activation function as showed in the following picture:
-
-!["Neural Network Architecture"](./NeuralNetwork.PNG)
-
+##### Figure 3 - Neural Network Architecture
 
 So the Neural Network is basically defined by:
 
@@ -74,124 +100,199 @@ So the Neural Network is basically defined by:
 * How many hidden layers are present.
 * The weigth of each interconnection.
 * The activation function at each neuron.
-* The bias input to each layer - excluding input layer
+* The bias input to each layer. input layer has no bias.
 
 
-# Now let's classify the Iris!
+# 5. Let's challenge the Neural Network to classify the Iris, can it do better than you?
 
-As first step we have to create the Neural Network capable of classifing the Iris species. We will be using a standard method based on supervised learning, exactly using 66% of the Iris Data Set above, the 33% Data Set will be use to Validate the Neural Network.
+As first step we have to create the Neural Network capable of classifing the Iris species. We will be using the standard method training plus testing as described in the previous paragraph.
 
 So basicall the Neural Network will learn from examples and than will be evaluated with a classification test.
 
-THe study is based on the R package nnet, that is a simple package that support only one hidden layer but it is powerful enough to train good models and for tutorial reasons.
+The study is based on the R package nnet, that is a simple package that support only one hidden layer but it is powerful enough to train good models and for tutorial reasons.
 
-Let's split the Iris data in trainig set to learn and testing set to test, according to 66% - 33% ratio.
+From previous chapters you remember that the input to classify the Iris are:
 
-```{r}
-set.seed(180)
-i <- sample(1:150,100)
-iris_train <- iris[i,]
-iris_test <- iris[-i,]
-summary(iris_train)
+1. Sepal Length
+2. Sepal Width 
+3. Petal Length
+4. Petal Width
+
+**As we have 4 input, we need 4 neural nodes in input** fed by the Sepal and Petal length and width, and **3 neural nodes in output as we have three possible output**:
+
+1. setosa
+2. versicolor
+3. virginica. 
+
+For each input flower, the Neural Network provides 3 numbers, one associated to each type of Iris, the greatest value identify the answer of the network. For example if we have as output setosa = 19, versicolor = 34, virginca = 2, it means that the input flower is classified as versicolor as it has the highest value associated.
+
+### Neural Node with one single hidden node
+
+As we said we will investigate Neural Network with only one hidden layer. To start with the simplest possible Neural Network, we will consider only one neural node in the hidden layer. the activation function we consider is the **sigmoid** see Figure 3.
+
+As from the previous chapter, the only thing we have to tune now are the weigths in red as you can see in the following picture.
+
+
+<p style="text-align:center;"><img src="./OneNode11W.png" alt="Drawing" style="width: 500px;"></p>
+
+##### Figure 4 - One Hidden node Neural Network. 11 weights to be tuned.
+
+The tuning of the parameters is actually the learning phase, called also trainig phase. The **training phase** for our simple case consists of the following steps:
+
+1. Initialize the 11 weights with random numbers.
+2. Input 100 flowers for training.
+3. Compare the output with correct answers and calculate an error.
+4. Adjust the weights - called backpropagation method - and go to step 2.
+
+The loop is actually stopped either when the error is satisfactory or when a maximum number of iteration is reached.
+
+Those steps defines how **the Neural Network learns**.
+
+It is important to note that if we stop at step 1, we have a random neural network, that is in other words an untrained network.
+Intiutively we can expect that such initial Network, that is not trained, is basically providing random output, with an expected accuracy of 33% in this case as we have three possible output.
+
+#### The Initial untrained Neural Network
+
+The following Neural Network represents the Initial Neural Network, before training. The width of the internodes connections is proportional to the weigth. If we test this untrained network with the testing data, we actually obtain the following table, meaning that the Netowrk output is always setosa, and the accuracy is 28%, that is about 33% as expected.
+
+
+```{r, echo = FALSE, results = FALSE, comment = FALSE, warning= FALSE}
+# library(devtools)
+#source_url('https://gist.githubusercontent.com/fawda123/7471137/raw/466c1474d0a505ff044412703516c34f1a4684a5/nne#t_plot_update.r')
+#library(nnet)
+#set.seed(18)
+#irnn <- nnet(Species ~ ., data = iris_train, size = 1, maxit = 0)
+# plot.nnet(irnn)
+
+```
+![](./Random Neural Network.PNG)
+
+
+##### Figure 5 - The Result of untrained Neural Network are basically as good as random choices
+
+
+```{r, echo = FALSE}
+# irpred <- predict(irnn, iris_test, type = "class")
+# table(iris_test$Species, irpred)
+# sum(iris_test$Species == irpred) / length(iris_test$Species)
+
+
 ```
 
-Now we need 4 neural nodes in input fed by the Sepal and Petal length and width, and 3 neural nodes in output to specify the probability of each species.
-Let's consider only one neural node in the hidden layer (only one hidden layer is considered here for simplicity), the activation function we consider is the sigmoid and then the resulting Neural Network looks as follow:
+This is according to our intution, if you don't know anything about a topic, you are going to provide answers with the same correctness of random answer.
 
-```{r}
-library(devtools)
-source_url('https://gist.githubusercontent.com/fawda123/7471137/raw/466c1474d0a505ff044412703516c34f1a4684a5/nnet_plot_update.r')
-library(nnet)
+#### The Neural Network after one learning cycle
+
+In order to improve, the Neural Network must be fed with examples, as stated before we must go through the training steps to adjust weights and minimize the errors. Let's see how the Neural Network improves going through one single minimization cycle, that is going through the 100 test flowers only once. 
+
+The resulting Network and results with test data as input is in the following picture.
+
+![](./1cycleNN.PNG)
+
+##### Figure 6 - The Neural Network after one cycle training
+
+```{r, echo = FALSE}
+# library(nnet)
+# set.seed(18)
+# irnn <- nnet(Species ~ ., data = iris_train, size = 1, maxit = 1)
+# irpred <- predict(irnn, iris_test, type = "class")
+
+# table(iris_test$Species, irpred)
+# sum(iris_test$Species == irpred) / length(iris_test$Species)
+```
+
+#### The Neural Network after several learning cycles
+
+As the first learning cycle didn't improve the result, so let the Neural Network play and play again with the data set as Romans said "Repetita Iuvant": repeating things helps! Let's apply the default 100 repetition.
+After this training, the parameters tuning led to an improvement. Now the accuracy is 54%. See the following picture.
+
+![](./ManycyclesNN.PNG)
+
+##### Figure 7 - The Neural Network after many cycle training.
+
+
+```{r, echo = FALSE}
 set.seed(18)
-irnn <- nnet(Species ~ ., data = iris_train, size = 1, maxit = 0)
-plot.nnet(irnn)
+# irnn <- nnet(Species ~ ., data = iris_train, size = 1)
+# irpred <- predict(irnn, iris_train, type = "class")
+
+
+# table(iris_train$Species, irpred)
+# sum(iris_train$Species == irpred) / length(iris_train$Species)
 
 ```
 
-So it basically model creation at this point consists of "tuning" the 11 weights and the bias value. This is obatain in an iterative way, starting with random numbers and then changing them with a method called backpropagation in order to minimize the output error, so to minimize the misclassification. The iris_train data is used several time to obtain the convergence.
-Let's have a look at how such network works before "learning", so before the weights are tuned. It means basically that we are using random numbers.
 
-```{r}
-irpred <- predict(irnn, iris_train, type = "class")
-table(iris_train$Species, irpred)
-sum(iris_train$Species == irpred) / length(iris_train$Species)
-
-```
-
-Unsurprisingly the accuracy is 36%, that is basically random choice of the Iris type. Now lets apply one cycle learning and see if it improves, so if it learns.
-
-```{r}
-library(nnet)
-set.seed(18)
-irnn <- nnet(Species ~ ., data = iris_train, size = 1, maxit = 1)
-irpred <- predict(irnn, iris_train, type = "class")
-
-table(iris_train$Species, irpred)
-sum(iris_train$Species == irpred) / length(iris_train$Species)
-```
-
-Well it seems that the first learning cycle didn't improve, so let the Neural Network play and play again with the data set as Romans said "Repetita Iuvant": repeating things help! Let's apply the default nnet package 100 repetition.
-
-```{r}
-set.seed(18)
-irnn <- nnet(Species ~ ., data = iris_train, size = 1)
-irpred <- predict(irnn, iris_train, type = "class")
-
-
-table(iris_train$Species, irpred)
-sum(iris_train$Species == irpred) / length(iris_train$Species)
-
-```
-
-Good the Neural Network improved a lot! Now it classifies the Iris species with 73% accuracy! At least in the iris_train. But now let's see if it can understand Species from a new data set, never seen before, not used for traning, the iris_test.
-
-```{r}
-irpred <- predict(irnn, iris_test, type = "class")
-table(iris_test$Species, irpred)
-sum(iris_test$Species == irpred) / length(iris_test$Species)
-```
-
-Good! We are 54% with only one neural node. Let's have a look at it, note how the weights changed as you can see with the size of the links between neural nodes.
-
-```{r}
-plot.nnet(irnn)
-```
-
-Now let's try with a more complex Neural Network, in this case we increase the number of Neural Nodes in the hidden layer to 3
-
-```{r}
-set.seed(18)
-irnn <- nnet(Species ~ ., data = iris_train, size = 3)
-irpred <- predict(irnn, iris_train, type = "class")
-
-
-table(iris_train$Species, irpred)
-sum(iris_train$Species == irpred) / length(iris_train$Species)
-```
-
-Very good improvement! We are now at 100% in the training set. This is not surprisingly we imporved, in fact the second models has higher number of neural nodes and connections among them. So basically we evolved the species!
-Let's test it against testing set.
-
-```{r}
-irpred <- predict(irnn, iris_test, type = "class")
-table(iris_test$Species, irpred)
-sum(iris_test$Species == irpred) / length(iris_test$Species)
-
-```
-
-Doing very well! 96% Accuracy. Let's have a look at the Neural Net:
-
-```{r}
-plot.nnet(irnn)
+```{r, echo = FALSE}
+# irpred <- predict(irnn, iris_test, type = "class")
+# table(iris_test$Species, irpred)
+# sum(iris_test$Species == irpred) / length(iris_test$Species)
 ```
 
 
-# Conclusion
-We have trained a simple Neural Network based on available data that teaches how to classify the Iris species based on sepal-petal length and width. The training consisted of tuning weigths in the Neural Network by going through the trainig set several time. This process is pretty similar to a human learning process, where the man is trained with a controlled environemnt and he can check his results with actual results. 
 
-After the training is completed, meaning that the man is making a limited number of errors, he is ready to face real cases, that is cases where he doesn't know the answer and he has to apply what he learnt.
+```{r, echo = FALSE}
+# plot.nnet(irnn)
+```
 
-This is exaclty what we did here with the simple Neural Net exercize. Now the Neural Net can classify Iris. Note also the effect of more neural nodes in the hidden layer that improved the accuracy from 54% to 96%. Note also that an untrained netowork is providing random guess.
+### The Neural Network with three hidden nodes
+
+As the Accuracy is quite low for the one node hidden network, let's try with a more complex Neural Network, in this case we increase the number of Neural Nodes in the hidden layer to 3 and perform several cycles learning. 
+
+```{r, echo = FALSE}
+# set.seed(18)
+# irnn <- nnet(Species ~ ., data = iris_train, size = 3)
+# irpred <- predict(irnn, iris_train, type = "class")
+
+
+# table(iris_train$Species, irpred)
+#sum(iris_train$Species == irpred) / length(iris_train$Species)
+```
+
+
+```{r, echo = FALSE}
+# irpred <- predict(irnn, iris_test, type = "class")
+# table(iris_test$Species, irpred)
+# sum(iris_test$Species == irpred) / length(iris_test$Species)
+
+```
+
+As you can see in the following picture, the three hidden nodes Neural Network is doing much better than the previous one, reaching an accuracy of 96%.
+
+```{r, echo = FALSE}
+# plot.nnet(irnn)
+```
+
+![](./ThreeNodesNN.PNG)
+
+##### Figure 8 - The Neural Network with three nodes in the hidden layer
+
+Note that in this case we didn't write the weights in the picture for graphical reasons, however you can recognize the increased number of links, so that the weights to be optimized in this case is equal to 27. The ticker the line in the picture the greater the weight is. 
+
+The increased complexity of the Neural Netowork provides improved result. This is according to our intution and common sense, so one can expect that recognizing an image requires much more complex Neural Network.
+
+# 6. Did the Neural Network do better than you?
+
+it is very likely that the simple one hidden layer three nodes Neural Network did better than you in Iris classification. But how can a 12 nodes - 27 weights Neural Network do better than a Human Brain consisting of about $10^{11}$ Neurons EACH with about $10^{4}$ 
+weights?
+
+This is because the classification here is based on measures, that are numbers where computer are much better then us. But numbers are not the "real" world, they are abstractions of it. Human Brain in contrast is excellent to work with the real world, that is on actual flowers images rather than measures of it.
+
+
+# 7. Conclusions
+
+**What we did**:
+we explained the architecture of Neural Network and we have trained two simple Neural Networks based on data about how to classify the Iris species based on sepal-petal length and width. Note that this task is in the area of Narrow Artificial Intellingence, that is about doing specific, very well defined tasks.
+
+**Neural Network learn by itself**:
+We have seen that we can train a Neural Network just by "showing" examples, there is no need to actually teach Neural Network how to do things, no need to code complex algorithms in computer program. After the training is done, the Neural Network can face real new cases, and apply to them what it learnt. The Neural Network learns by itself.
+
+**How Neural Network learns**:
+We have shown that training a Network means actually optimizing the weights of the connections, once we have selected how many hidden layers, how many nodes per hidden layer we want and the activation function to be used. For the sake of simplicity we didn't cover the algorithms to optimize the weights, called stochastic gradient descent with backpropagation technique.
+
+**More complex Neural Network can do better**:
+We showed how more complex Neural Network can do better than simple ones, in our case we moved from 54% accuracy with a one hidden neural node to 96% accuracy with three hidden neural nodes.
+
 
 
 
