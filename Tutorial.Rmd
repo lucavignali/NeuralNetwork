@@ -1,5 +1,5 @@
 ---
-title: 'Artificial Intelligence: How is Neural Network working, better than you?'
+title: 'Artificial Intelligence: How are Neural Networks working, better than you?'
 author: "Luca Vignali"
 output:
   html_notebook: default
@@ -11,17 +11,17 @@ In this document we challenge you with the following: **Can you make a classific
 
 **In the following you will find**:
 
-* Chapter 2: we will describe the challenge that is classify the Iris Flower species based on key flower characteristics. Even if you don't want to create your model, read this part to understand the Neural Network learning process. 
+* Chapter 2: we will describe the challenge that is classifing the Iris Flower species based on key flower characteristics. Even if you don't want to create your model, read this part to understand the Neural Network learning process. 
 * Chapter 3: we will explain the Neural Network learning metodology, based on training phase and testing phase.
 * Chapter 4: we will briefly explain what a Neural Network is.
 * Chapter 5:  we will build two Neural Networks and test how well they can classify the Iris Flower, so you can see if you can do it better than Neural Network or not. For you to know, **the Neural Network here will reach 96% correct answers!** So you have to do better than this! But don't be afraid if you can't, you will understand why at the end.
 
 # 2. The Challenge: Classify Iris Flower
-Do you know Iris Flower? The Iris flower species recognition is a typical task to test Algorithms classification, so we will use this test to verify if you can classifiy Iris Flower better than a simple Neural Network.
+Do you know Iris Flower? The Iris flower species recognition is a typical task to test classification Algorithms, so we will use this test to verify if you can classifiy Iris Flower better than a simple Neural Network.
 
 The Iris flower can be classified according to the three species: Setosa, Versicolor and Virginica. 
 
-As we want to challenge you against a Simple Neural Network to keep it easy and understandable, we will not base our classification on images, but on length and width of Petal and Sepal. As you can see in the following picture, the three types of Iris have different shapes, and it is important to know that they can be classified based on lenght - width of Sepal and Petal, as you can see in the following images:
+As we want to challenge you against a Simple Neural Network to keep it easy and understandable, we will not base our classification on images, but on length and width of Petal and Sepal. As you can see in the following picture, the three types of Iris have different shapes, and it is important to know that they can be classified based on length - width of Sepal and Petal, as you can see in the following images:
 
 
 
@@ -29,7 +29,7 @@ As we want to challenge you against a Simple Neural Network to keep it easy and 
 
 ##### Figure 1 - Iris Flower Species and Attributes to classify them
 
-If you look at the Attribute Information box, you can see Petal and Sepal and few example of training material. Looking at the first row in the Example 5.3,3.7,1.5,0.2,Iris-Setosa, means that one specific flower, one sample, was an Iris Setosa with Sepal Length = 5.3cm, Sepal Width = 3.7cm, Petal Length = 1.5cm and Petal Width = 0.2cm.  
+If you look at the Attribute Information box, you can see Petal and Sepal and few example of training material. Looking at the first row in the Example *5.3,3.7,1.5,0.2,Iris-Setosa*, means that one specific flower, one sample, was an Iris Setosa with Sepal Length = 5.3cm, Sepal Width = 3.7cm, Petal Length = 1.5cm and Petal Width = 0.2cm.  
 
 ### You try to classify the Iris with this Data!
 
@@ -82,7 +82,7 @@ Before proceding with the training and the test, let's see how a Neural Network 
 A Neural Network consists of neural units connected among them and connected with the world through input and output. So basically Neural Network has:
 
 * one Input layer
-* one outpur layer 
+* one Output layer 
 * several hidden layers. 
 
 In the case the connections goes in one direction only from input to output such kind of Neural Network is a **Feed Forward Neural Network**. This is in contrast to convolutional and recursive Neural Network that have a different and more complex architecture. 
@@ -109,7 +109,7 @@ As first step we have to create the Neural Network capable of classifing the Iri
 
 So basicall the Neural Network will learn from examples and than will be evaluated with a classification test.
 
-The study is based on the R package nnet, that is a simple package that support only one hidden layer but it is powerful enough to train good models and for tutorial reasons.
+The study is based on the *R package nnet*, that is a simple package that support only one hidden layer but it is powerful enough to train good models and for tutorial reasons.
 
 From previous chapters you remember that the input to classify the Iris are:
 
@@ -120,9 +120,9 @@ From previous chapters you remember that the input to classify the Iris are:
 
 **As we have 4 input, we need 4 neural nodes in input** fed by the Sepal and Petal length and width, and **3 neural nodes in output as we have three possible output**:
 
-1. setosa
-2. versicolor
-3. virginica. 
+1. Setosa
+2. Versicolor
+3. Virginica. 
 
 For each input flower, the Neural Network provides 3 numbers, one associated to each type of Iris, the greatest value identify the answer of the network. For example if we have as output setosa = 19, versicolor = 34, virginca = 2, it means that the input flower is classified as versicolor as it has the highest value associated.
 
